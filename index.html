@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Royal Play — Demo Casino</title>
+<style>
+:root{--bg:#0b1020;--panel:#151d33;--panel2:#1d2944;--gold:#f4c95d;--text:#f4f6fb;--muted:#aab5cc;--green:#48d597;--red:#ff7285}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#1a2850 0,#0b1020 50%);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px max(16px,calc((100% - 1100px)/2));border-bottom:1px solid #ffffff16;background:#090e1dcc;position:sticky;top:0;backdrop-filter:blur(12px);z-index:5}
+.brand{font-weight:900;letter-spacing:.5px;font-size:20px}.brand span{color:var(--gold)}button{border:0;border-radius:11px;padding:11px 14px;font-weight:750;cursor:pointer;background:var(--gold);color:#171717}button.secondary{background:#2b3857;color:white}button.danger{background:#6b2635;color:white}button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1100px;margin:auto;padding:22px 16px 60px}.notice{background:#342b17;border:1px solid #8a6c2b;color:#ffe9a8;border-radius:12px;padding:12px 14px;line-height:1.45;margin-bottom:20px}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;align-items:stretch}.card{background:linear-gradient(145deg,#18233c,#121a2d);border:1px solid #ffffff12;border-radius:18px;padding:20px;box-shadow:0 14px 40px #0002}
+h1{font-size:clamp(27px,5vw,44px);line-height:1.05;margin:0 0 12px}h2{margin:0 0 14px;font-size:20px}p{color:var(--muted);line-height:1.55}.gold{color:var(--gold)}.balance{font-size:34px;font-weight:900;color:var(--gold);margin:8px 0}.small{font-size:12px;color:var(--muted)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.tabs button{background:#202c47;color:#dce4f6}.tabs button.active{background:var(--gold);color:#111}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.game{min-height:155px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(140deg,#26365b,#151e34);border:1px solid #ffffff15;border-radius:16px;padding:17px}.emoji{font-size:32px}.game h3{margin:8px 0 4px}.game p{font-size:13px;margin:0 0 12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.field{width:100%;background:#0d1426;border:1px solid #34415d;border-radius:10px;color:white;padding:11px;margin:5px 0 12px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:520px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid #ffffff13;font-size:13px}th{color:var(--gold)}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#263653;color:#dfe8ff;font-size:12px}.pill.ok{background:#173d34;color:#8ff0c4}.pill.pending{background:#4b3a17;color:#ffe39a}.hidden{display:none!important}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{padding:13px;background:#0f1729;border-radius:12px}.stat strong{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}.toast{padding:10px 12px;background:#15382f;border:1px solid #286b56;color:#a3f4d3;border-radius:10px;margin:12px 0;display:none}
+footer{text-align:center;color:#77849d;font-size:12px;margin-top:32px}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.games{grid-template-columns:1fr}.statgrid{grid-template-columns:1fr 1fr}header{padding:12px 14px}.card{padding:16px}}
+</style>
+</head>
+<body>
+<header><div class="brand">♛ ROYAL <span>PLAY</span> <small style="font-size:10px;color:#9eabc4">DEMO</small></div><div class="row"><span class="pill">🪙 <b id="topBalance">1,000</b> coins</span><button class="secondary" id="adminToggle">Admin Panel</button></div></header>
+<main>
+<div class="notice"><b>DEMO ONLY:</b> Is website mein sirf virtual coins hain. Koi real-money deposit, betting, cash-out ya asli withdrawal nahi hota. Yeh single-file prototype hai—production login/database/security ke liye backend zaroori hai.</div>
+<section id="playerView">
+<div class="hero">
+<div class="card"><p class="gold" style="font-weight:800;letter-spacing:1.5px">WELCOME TO ROYAL PLAY</p><h1>Play for fun.<br><span class="gold">No real money.</span></h1><p>Casino-style demo games aur virtual coins ke saath apna gaming dashboard test karo.</p><div class="row"><button onclick="scrollToGames()">Games explore karo ↓</button><button class="secondary" onclick="showHistory()">Game history</button></div></div>
+<div class="card"><div class="small">YOUR DEMO BALANCE</div><div class="balance"><span id="balance">1,000</span> 🪙</div><p>Virtual coins only. Inka koi cash value nahi hai.</p><button class="secondary" onclick="dailyBonus()">Demo bonus +100 coins</button><div class="small" id="bonusHint" style="margin-top:8px">Bonus ek baar is browser session mein.</div></div>
+</div>
+<div class="tabs"><button class="active" id="gamesTab" onclick="switchTab('games')">🎮 Games</button><button id="historyTab" onclick="switchTab('history')">📜 History</button></div>
+<div id="gamesSection"><h2>Featured games</h2><div class="games">
+<div class="game"><div><div class="emoji">🎡</div><h3>Lucky Wheel</h3><p>Virtual spin; random demo points.</p></div><button onclick="play('Lucky Wheel')">Spin (10 coins)</button></div>
+<div class="game"><div><div class="emoji">🃏</div><h3>Card Flip</h3><p>Flip a card to win demo points.</p></div><button onclick="play('Card Flip')">Play (10 coins)</button></div>
+<div class="game"><div><div class="emoji">🎲</div><h3>Dice Roll</h3><p>Roll the dice for fun.</p></div><button onclick="play('Dice Roll')">Roll (10 coins)</button></div>
+</div></div>
+<div id="historySection" class="card hidden" style="margin-top:16px"><h2>Recent game history</h2><div id="historyTable" class="tablewrap"></div></div>
+</section>
+<section id="adminView" class="hidden">
+<div class="card"><div class="row" style="justify-content:space-between"><div><p class="gold" style="margin:0;font-weight:800">ADMIN CONSOLE</p><h1 style="font-size:30px">Control Center</h1></div><span class="pill pending">Local demo mode</span></div><p>Yeh panel sample data aur isi browser ke demo actions ke liye hai. Ismein real users ya real payments connect nahi hain.</p>
+<div class="statgrid"><div class="stat"><span>Demo users</span><strong id="usersCount">3</strong></div><div class="stat"><span>Game rounds</span><strong id="roundCount">0</strong></div><div class="stat"><span>Virtual coins in play</span><strong id="coinsCount">1,000</strong></div></div>
+<div class="tabs"><button class="active" onclick="adminTab('users',this)">Users</button><button onclick="adminTab('results',this)">Results</button><button onclick="adminTab('withdrawals',this)">Withdrawal requests</button><button onclick="adminTab('reports',this)">Reports</button></div>
+<div id="adminUsers"><h2>Users (sample)</h2><div class="tablewrap"><table><thead><tr><th>Username</th><th>Role</th><th>Demo coins</th><th>Status</th><th>Action</th></tr></thead><tbody id="usersRows"></tbody></table></div></div>
+<div id="adminResults" class="hidden"><h2>Game results</h2><div id="resultsTable" class="tablewrap"></div></div>
+<div id="adminWithdrawals" class="hidden"><h2>Demo withdrawal requests</h2><p>Cash withdrawals disabled. Sirf virtual-coin request status ka mock workflow hai.</p><div id="withdrawTable" class="tablewrap"></div></div>
+<div id="adminReports" class="hidden"><h2>Reports</h2><div class="statgrid"><div class="stat"><span>Total demo rounds</span><strong id="reportRounds">0</strong></div><div class="stat"><span>Coins spent</span><strong id="reportSpent">0</strong></div><div class="stat"><span>Coins won</span><strong id="reportWon">0</strong></div></div><button class="secondary" onclick="downloadReport()">Download CSV report</button></div>
+</div></section>
+<footer>Royal Play Demo • No real-money gaming • Prototype for learning</footer>
+</main>
+<script>
+let balance=1000, rounds=[], bonusUsed=false, mutedUsers=new Set();
+let users=[{name:'demo_player',role:'Player',coins:1000,status:'Active'},{name:'sample_user2',role:'Player',coins:650,status:'Active'},{name:'sample_user3',role:'Player',coins:250,status:'Active'}];
+let withdrawals=[{id:'D-1001',user:'demo_player',amount:100,status:'Demo pending'},{id:'D-1002',user:'sample_user2',amount:50,status:'Demo pending'}];
+const fmt=n=>Number(n).toLocaleString('en-IN');
+function sync(){document.getElementById('balance').textContent=fmt(balance);document.getElementById('topBalance').textContent=fmt(balance);document.getElementById('roundCount').textContent=rounds.length;document.getElementById('coinsCount').textContent=fmt(balance);document.getElementById('reportRounds').textContent=rounds.length;document.getElementById('reportSpent').textContent=rounds.reduce((a,r)=>a+r.cost,0);document.getElementById('reportWon').textContent=rounds.reduce((a,r)=>a+r.won,0);renderHistory();renderUsers();renderResults();renderWithdrawals()}
+function play(game){if(balance<10){alert('Demo coins kam hain. Bonus button try karo.');return}balance-=10;let won=[0,5,10,15,20,30][Math.floor(Math.random()*6)];balance+=won;rounds.unshift({time:new Date().toLocaleString(),game,cost:10,won,result:won>10?'Win':'Played'});sync();alert(game+' demo round complete! '+won+' virtual coins mile.')}
+function dailyBonus(){if(bonusUsed){alert('Demo bonus is session mein use ho chuka hai.');return}bonusUsed=true;balance+=100;document.getElementById('bonusHint').textContent='Bonus claimed!';sync()}
+function scrollToGames(){document.getElementById('gamesSection').scrollIntoView({behavior:'smooth'})}
+function switchTab(tab){document.getElementById('gamesSection').classList.toggle('hidden',tab!=='games');document.getElementById('historySection').classList.toggle('hidden',tab!=='history');document.getElementById('gamesTab').classList.toggle('active',tab==='games');document.getElementById('historyTab').classList.toggle('active',tab==='history');if(tab==='history')renderHistory()}
+function showHistory(){switchTab('history');document.getElementById('historySection').scrollIntoView({behavior:'smooth'})}
+function renderHistory(){let el=document.getElementById('historyTable');if(!rounds.length){el.innerHTML='<p>Abhi koi game round nahi hai. Demo game khel kar history dekho.</p>';return}el.innerHTML='<table><thead><tr><th>Time</th><th>Game</th><th>Spent</th><th>Won</th><th>Result</th></tr></thead><tbody>'+rounds.map(r=>`<tr><td>${r.time}</td><td>${r.game}</td><td>${r.cost}</td><td>${r.won}</td><td>${r.result}</td></tr>`).join('')+'</tbody></table>'}
+function adminTab(tab,btn){['users','results','withdrawals','reports'].forEach(t=>document.getElementById('admin'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==tab));document.querySelectorAll('#adminView .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function renderUsers(){document.getElementById('usersRows').innerHTML=users.map((u,i)=>`<tr><td>${u.name}</td><td>${u.role}</td><td>${fmt(u.coins)}</td><td><span class="pill ${mutedUsers.has(i)?'pending':'ok'}">${mutedUsers.has(i)?'Paused':'Active'}</span></td><td><button class="secondary" onclick="toggleUser(${i})">${mutedUsers.has(i)?'Unpause':'Pause'}</button></td></tr>`).join('');document.getElementById('usersCount').textContent=users.length}
+function toggleUser(i){mutedUsers.has(i)?mutedUsers.delete(i):mutedUsers.add(i);renderUsers()}
+function renderResults(){let el=document.getElementById('resultsTable');if(!rounds.length){el.innerHTML='<p>No demo results yet.</p>';return}el.innerHTML='<table><thead><tr><th>Time</th><th>Player</th><th>Game</th><th>Cost</th><th>Won</th><th>Outcome</th></tr></thead><tbody>'+rounds.map(r=>`<tr><td>${r.time}</td><td>demo_player</td><td>${r.game}</td><td>${r.cost}</td><td>${r.won}</td><td>${r.result}</td></tr>`).join('')+'</tbody></table>'}
+function renderWithdrawals(){document.getElementById('withdrawTable').innerHTML='<table><thead><tr><th>ID</th><th>User</th><th>Virtual amount</th><th>Status</th><th>Action</th></tr></thead><tbody>'+withdrawals.map((w,i)=>`<tr><td>${w.id}</td><td>${w.user}</td><td>${w.amount} coins</td><td><span class="pill ${w.status==='Demo pending'?'pending':'ok'}">${w.status}</span></td><td><button class="secondary" onclick="setWithdrawal(${i},'Demo reviewed')">Mark reviewed</button></td></tr>`).join('')+'</tbody></table>'}
+function setWithdrawal(i,status){withdrawals[i].status=status;renderWithdrawals();alert('Demo status update hua. Koi payment/withdrawal nahi hua.')}
+function downloadReport(){let rows=[['Time','Game','Cost','Won','Result'],...rounds.map(r=>[r.time,r.game,r.cost,r.won,r.result])];let csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='royal-play-demo-report.csv';a.click();URL.revokeObjectURL(a.href)}
+document.getElementById('adminToggle').addEventListener('click',()=>{let admin=document.getElementById('adminView');let isHidden=admin.classList.contains('hidden');admin.classList.toggle('hidden');document.getElementById('playerView').classList.toggle('hidden',isHidden);document.getElementById('adminToggle').textContent=isHidden?'Player View':'Admin Panel';if(isHidden)sync()});
+sync();
+</script>
+</body></html>
